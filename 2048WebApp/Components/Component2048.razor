@@ -1,0 +1,70 @@
+﻿@using _2048WebApp.Models
+@using _2048WebApp.Services
+@*@using Microsoft.AspNetCore.Components.Web*@
+@*@inject _2048GameService gameService*@
+<div class="game">
+    <div class="main-container" id="main-container">
+        @if (gameService.AvailableMoves == Moves.None)
+        {
+            <div class="game-over-overlay">Game Over</div>
+        }
+        <div class="tiles">
+            @foreach (var row in gameService.Board)
+            {
+                @foreach (var tile in row)
+                {
+                    @if (tile == 0)
+                    {
+                        <div class="tile-container empty"></div>
+                    }
+                    else
+                    {
+                        <div class="tile-container">@tile</div>
+                    }
+                }
+            }
+        </div>
+    </div>
+    <div class="move-buttons">
+        <button @onclick="(e => Restart())" class="btn btn-primary">
+            Restart
+        </button>
+        <button @onclick="(e => Move(Moves.Left))"
+                class="btn btn-primary"
+                id="LeftMoveButton"
+                disabled="@((gameService.AvailableMoves & Moves.Left) != Moves.Left ? "disabled" : null)">
+            Left
+        </button>
+        <button @onclick="(e => Move(Moves.Up))"
+                class="btn btn-primary"
+                id="UpMoveButton"
+                disabled="@((gameService.AvailableMoves & Moves.Up) != Moves.Up ? "disabled" : null)">
+            Up
+        </button>
+        <button @onclick="(e => Move(Moves.Right))"
+                class="btn btn-primary"
+                id="RightMoveButton"
+                disabled="@((gameService.AvailableMoves & Moves.Right) != Moves.Right ? "disabled" : null)">
+            Right
+        </button>
+        <button @onclick="(e => Move(Moves.Down))"
+                class="btn btn-primary"
+                id="DownMoveButton"
+                disabled="@((gameService.AvailableMoves & Moves.Down) != Moves.Down ? "disabled" : null)">
+            Down
+        </button>
+    </div>
+</div>
+@code {
+    _2048GameService gameService = new _2048GameService();
+    bool wasWinnerDeclared = false;
+    void Restart()
+    {
+        gameService.NewBoard();
+    }
+
+    void Move(Moves playerMove)
+    {
+        gameService.PostMove(playerMove);
+    }
+}

@@ -2,13 +2,17 @@
 
 namespace _2048WebApp.Services
 {
-    public static class _2048GameService
+    public class _2048GameService
     {
-        public static int[][] Board { get; private set; }
-        public static int MaxTile { get; private set; }
-        static _2048GameService()
+        public int[][] Board { get; private set; }
+        public int MaxTile { get; private set; }
+        public Moves AvailableMoves { get; private set; }
+        public bool Winner { get; private set; }
+        public _2048GameService()
         {
             Board = CreateBoard();
+            AvailableMoves = CheckMoves(Board);
+            Winner = false;
         }
         public static void MoveUp(ref int[][] board)
         {
@@ -197,7 +201,7 @@ namespace _2048WebApp.Services
                 }
             }
         }
-        public static void Move(ref int[][] board, Moves playerMove)
+        public void Move(ref int[][] board, Moves playerMove)
         {
             switch (playerMove)
             {
@@ -215,7 +219,26 @@ namespace _2048WebApp.Services
                     break;
             }
         }
-        public static Moves CheckMoves(int[][] board)
+        public void Move(Moves playerMove)
+        {
+            var board = Board;
+            switch (playerMove)
+            {
+                case Moves.Up:
+                    MoveUp(ref board);
+                    break;
+                case Moves.Right:
+                    MoveRight(ref board);
+                    break;
+                case Moves.Down:
+                    MoveDown(ref board);
+                    break;
+                case Moves.Left:
+                    MoveLeft(ref board);
+                    break;
+            }
+        }
+        public Moves CheckMoves(int[][] board)
         {
             Moves result = Moves.None;
             int boardSize = board.Length;
@@ -268,7 +291,7 @@ namespace _2048WebApp.Services
             }
             return result;
         }
-        public static void SpawnTile(ref int[][] board)
+        public void SpawnTile(ref int[][] board)
         {
             int boardSize = board.Length;
             int maxTile = 0;
@@ -290,9 +313,12 @@ namespace _2048WebApp.Services
                 Tuple<int, int> randomTile = indices[random.Next(indices.Count)];
                 board[randomTile.Item1][randomTile.Item2] = random.Next(1, 11) <= 8 ? 2 : 4;
             }
-            MaxTile = maxTile;
+            if (maxTile == 2048)
+            {
+                Winner = true;
+            }
         }
-        public static int[][] CreateBoard(int boardSize = 4)
+        public int[][] CreateBoard(int boardSize = 4)
         {
             int[][] board = new int[boardSize][];
             for (int i = 0; i < boardSize; i++)
@@ -310,17 +336,20 @@ namespace _2048WebApp.Services
             }
             return board;
         }
-        public static void NewBoard(int boardSize = 4)
+        public void NewBoard(int boardSize = 4)
         {
             int[][] board = CreateBoard(boardSize);
             MaxTile = 0;
             Board = board;
+            AvailableMoves = CheckMoves(board);
+            Winner = false;
         }
-        public static void PostMove(int playerMove)
+        public void PostMove(Moves playerMove)
         {
-            int[][] board = Board;
-            Move(ref board, (Moves)playerMove);
+            var board = Board;
+            Move(ref board, playerMove);
             SpawnTile(ref board);
+            AvailableMoves = CheckMoves(board);
         }
     }
 }

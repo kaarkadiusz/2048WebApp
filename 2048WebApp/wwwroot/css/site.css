@@ -20,6 +20,10 @@ html {
 body {
     margin-bottom: 60px;
 }
+.game {
+    display:block;
+    margin: auto;
+}
 .game-over-overlay, .winner-overlay {
     display: flex;
     align-items: center;
@@ -44,13 +48,14 @@ body {
 .main-container {
     width: 500px;
     height: 500px;
-    background-color: darkslategray;
-    margin: 0 auto;
+    
+    margin: auto;
     border-radius: 10px;
     position: relative;
 }
 
 .tiles {
+    background-color: darkslategray;
     display: grid;
     width: 100%;
     height: 100%;

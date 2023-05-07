@@ -1,62 +1,11 @@
 ﻿@page
 @model _2048WebApp.Pages._2048Model
+@using _2048WebApp
 @using _2048WebApp.Models
+@using _2048WebApp.Components
 @{
     ViewData["Title"] = "2048";
 }
-<form method="post" asp-page-handler="New">
-    <button class="btn btn-primary">New</button>
-</form>
-<div class="main-container" id="main-container">
-    @if (Model.availableMoves == Moves.None)
-    {
-        <div class="game-over-overlay">Game Over</div>
-    }
-    @if (Model.maxTile == 2048)
-    {
-        <div class="winner-overlay">You Win</div>
-    }
-    <div class="tiles">
-        @foreach (var row in Model.board)
-        {
-            @foreach (var tile in row)
-            {
-                @if (tile == 0)
-                {
-                    <div class="tile-container empty"></div>
-                }
-                else
-                {
-                    <div class="tile-container">@tile</div>
-                }
-            }
-        }
-    </div>
-</div>
-<div class="move-buttons">
-    <form method="post">
-        <button asp-page-handler="Move" asp-route-playerMove="8" class="btn btn-secondary" title="LeftArrow"
-                disabled="@((Model.availableMoves & Moves.Left) != Moves.Left ? "disabled" : null)"
-                id="LeftMoveButton">
-            <i class="bi bi-arrow-left"></i>
-        </button>
-        <button asp-page-handler="Move" asp-route-playerMove="1" class="btn btn-secondary" title="UpArrow"
-                disabled="@((Model.availableMoves & Moves.Up) != Moves.Up ? "disabled" : null)"
-                id="UpMoveButton">
-            <i class="bi bi-arrow-up"></i>
-        </button>
-        <button asp-page-handler="Move" asp-route-playerMove="2" class="btn btn-secondary" title="RightArrow"
-                disabled="@((Model.availableMoves & Moves.Right) != Moves.Right ? "disabled" : null)"
-                id="RightMoveButton">
-            <i class="bi bi-arrow-right"></i>
-        </button>
-        <button asp-page-handler="Move" asp-route-playerMove="4" class="btn btn-secondary" title="DownArrow"
-                disabled="@((Model.availableMoves & Moves.Down) != Moves.Down ? "disabled" : null)"
-                id="DownMoveButton">
-            <i class="bi bi-arrow-down"></i>
-        </button>
-    </form>
-</div>
 <script>
     document.addEventListener("keydown", function (event) {
         switch (event.key) {
@@ -75,3 +24,5 @@
         }
     });
 </script>
+<component type="typeof(Components.Component2048)" render-mode="Server" />
+<script src="_framework/blazor.server.js"></script>
