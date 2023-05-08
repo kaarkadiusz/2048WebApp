@@ -4,9 +4,24 @@
 @*@inject _2048GameService gameService*@
 <div class="game">
     <div class="main-container" id="main-container">
+        <div class="restart-button">
+            <button @onclick="(e => Restart())" class="btn btn-primary">
+                Restart
+            </button>
+        </div>
         @if (gameService.AvailableMoves == Moves.None)
         {
             <div class="game-over-overlay">Game Over</div>
+        }
+        @if (gameService.Winner && !wasWinnerDeclared)
+        {
+            <div class="winner-overlay">
+                You Win!
+                <button class="btn btn-primary" style="white-space: nowrap" @onclick="(e => Continue())">Continue</button>
+            @{
+                disableButtons = true;
+            }
+            </div>
         }
         <div class="tiles">
             @foreach (var row in gameService.Board)
@@ -19,50 +34,57 @@
                     }
                     else
                     {
-                        <div class="tile-container">@tile</div>
+                        <div class="tile-container tile-@tile">@tile</div>
                     }
                 }
             }
         </div>
-    </div>
-    <div class="move-buttons">
-        <button @onclick="(e => Restart())" class="btn btn-primary">
-            Restart
-        </button>
-        <button @onclick="(e => Move(Moves.Left))"
-                class="btn btn-primary"
-                id="LeftMoveButton"
-                disabled="@((gameService.AvailableMoves & Moves.Left) != Moves.Left ? "disabled" : null)">
-            Left
-        </button>
-        <button @onclick="(e => Move(Moves.Up))"
-                class="btn btn-primary"
-                id="UpMoveButton"
-                disabled="@((gameService.AvailableMoves & Moves.Up) != Moves.Up ? "disabled" : null)">
-            Up
-        </button>
-        <button @onclick="(e => Move(Moves.Right))"
-                class="btn btn-primary"
-                id="RightMoveButton"
-                disabled="@((gameService.AvailableMoves & Moves.Right) != Moves.Right ? "disabled" : null)">
-            Right
-        </button>
-        <button @onclick="(e => Move(Moves.Down))"
-                class="btn btn-primary"
-                id="DownMoveButton"
-                disabled="@((gameService.AvailableMoves & Moves.Down) != Moves.Down ? "disabled" : null)">
-            Down
-        </button>
+        <div class="move-buttons">
+            <button @onclick="(e => Move(Moves.Left))"
+                    onmousedown="event.preventDefault()"
+                    class="btn btn-primary left"
+                    id="LeftMoveButton"
+                    disabled="@(((gameService.AvailableMoves & Moves.Left) != Moves.Left) || disableButtons ? " disabled" : null)">
+                <i class="bi bi-arrow-left"></i>
+            </button>
+            <button @onclick="(e => Move(Moves.Up))"
+                    onmousedown="event.preventDefault()"
+                    class="btn btn-primary up"
+                    id="UpMoveButton"
+                    disabled="@(((gameService.AvailableMoves & Moves.Up) != Moves.Up) || disableButtons ? " disabled" : null)">
+                <i class="bi bi-arrow-up"></i>
+            </button>
+            <button @onclick="(e => Move(Moves.Right))"
+                    onmousedown="event.preventDefault()"
+                    class="btn btn-primary right"
+                    id="RightMoveButton"
+                    disabled="@(((gameService.AvailableMoves & Moves.Right) != Moves.Right) || disableButtons ? " disabled" : null)">
+                <i class="bi bi-arrow-right"></i>
+            </button>
+            <button @onclick="(e => Move(Moves.Down))"
+                    onmousedown="event.preventDefault()"
+                    class="btn btn-primary down"
+                    id="DownMoveButton"
+                    disabled="@(((gameService.AvailableMoves & Moves.Down) != Moves.Down) || disableButtons ? "disabled" : null)">
+                <i class="bi bi-arrow-down"></i>
+            </button>
+        </div>
     </div>
 </div>
 @code {
     _2048GameService gameService = new _2048GameService();
     bool wasWinnerDeclared = false;
+    bool disableButtons = false;
     void Restart()
     {
+        wasWinnerDeclared = false;
         gameService.NewBoard();
     }
-
+    void Continue()
+    {
+        disableButtons = false;
+        wasWinnerDeclared = true;
+    }
     void Move(Moves playerMove)
     {
         gameService.PostMove(playerMove);

@@ -26,6 +26,8 @@ body {
 }
 .game-over-overlay, .winner-overlay {
     display: flex;
+    flex-direction: column;
+    text-shadow: 1px 1px 2px black;
     align-items: center;
     justify-content: center;
     color: rgba(245, 245, 245, 100%);
@@ -46,9 +48,9 @@ body {
 }
 
 .main-container {
+    position: absolute;
     width: 500px;
-    height: 500px;
-    
+    height: fit-content;
     margin: auto;
     border-radius: 10px;
     position: relative;
@@ -69,11 +71,11 @@ body {
 
 .tile-container {
     display: flex;
+    background-color: hsl(0, 0%, 100%);
     justify-content: center;
     align-items: center;
     border-radius: inherit;
     margin: 4px;
-    background-color: rgba(245, 245, 245, 100%);
     font-size: 2rem;
     font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
     text-align: center;
@@ -84,18 +86,100 @@ body {
         display: block;
         padding-top: 100%;
     }
+.tile-2 {
+    background-color: hsl(12, 100%, 95%);
+}
+.tile-4 {
+    background-color: hsl(12, 100%, 90%);
+}
+.tile-8 {
+    background-color: hsl(12, 100%, 85%);
+}
+.tile-16 {
+    background-color: hsl(12, 100%, 80%);
+}
+.tile-32 {
+    background-color: hsl(12, 100%, 75%);
+}
+.tile-64 {
+    background-color: hsl(12, 100%, 70%);
+}
+.tile-128 {
+    background-color: hsl(12, 100%, 65%);
+}
+.tile-256 {
+    background-color: hsl(12, 100%, 60%);
+}
+.tile-512 {
+    background-color: hsl(12, 100%, 55%);
+}
+.tile-1024 {
+    background-color: hsl(12, 100%, 50%);
+}
+.tile-2048 {
+    background-color: hsl(12, 100%, 45%);
+}
+.tile-4096 {
+    background-color: hsl(288, 100%, 70%);
+}
+.tile-8192 {
+    background-color: hsl(288, 100%, 60%);
+}
+.tile-16384 {
+    background-color: hsl(288, 100%, 50%);
+}
+.tile-32768 {
+    background-color: hsl(288, 100%, 40%);
+}
+.tile-65536 {
+    background-color: hsl(288, 100%, 30%);
+}
 
 .empty {
-    background-color: rgba(245, 245, 245, 40%);
+    background-color: hsla(12, 100%, 95%, 40%);
 }
-
-.move-buttons {
-    display: block;
-    width: 500px;
-    border-radius: 10px;
-    height: 100px;
-    background-color: darkslategray;
+.restart-button{
+    position: relative;
+    width: fit-content;
     margin: auto;
-    justify-items: center;
-    align-items: center;
+    margin-right: 0;
+    margin-bottom: 10px;
 }
+.move-buttons {
+    position: relative;
+    width: fit-content;
+    display: grid;
+    margin: auto;
+    padding: 10px;
+    grid-template-areas:
+        ". up ."
+        "left . right"
+        ". down .";
+    justify-items: center;
+    grid-template-columns: repeat(3, 50px);
+    grid-template-rows: repeat(3, 50px);
+}
+    .move-buttons button {
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        border: none;
+        outline: none;
+        background-color: #ccc;
+    }
+
+    .move-buttons .up {
+        grid-area: up;
+    }
+
+    .move-buttons .left {
+        grid-area: left;
+    }
+
+    .move-buttons .down {
+        grid-area: down;
+    }
+
+    .move-buttons .right {
+        grid-area: right;
+    }

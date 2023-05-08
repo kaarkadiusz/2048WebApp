@@ -336,6 +336,22 @@ namespace _2048WebApp.Services
             }
             return board;
         }
+        public int[][] CreateBoardRigged(int boardSize = 4)
+        {
+            int[][] board = new int[boardSize][];
+            int k = 2;
+            for (int i = 0; i < boardSize; i++)
+            {
+                board[i] = new int[boardSize];
+                for(int j = 0; j < boardSize; j++)
+                {
+                    board[i][j] = k;
+                    k *= 2;
+                }
+            }
+
+            return board;
+        }
         public void NewBoard(int boardSize = 4)
         {
             int[][] board = CreateBoard(boardSize);
